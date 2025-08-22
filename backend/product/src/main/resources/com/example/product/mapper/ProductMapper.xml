@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo_new.mapper.ProductMapper">
+    <insert id="insert">
+        insert into tb_product (
+            product_id, category_id, product_name, product_note, create_time,
+            created_by, deleted_flag, member_price, origin_place, price,
+            reserved_field1, reserved_field2, shipping_place, stock, update_time, updated_by
+        ) values (
+                    UUID(), #{categoryId}, #{productName}, #{productNote}, #{createTime},
+                     #{createdBy}, #{deletedFlag}, #{memberPrice}, #{originPlace}, #{price},
+                     #{reservedField1}, #{reservedField2}, #{shippingPlace}, #{stock}, #{updateTime}, #{updatedBy}
+                 )</insert>
+
+    <select id="search" resultType="com.example.product.pojo.dto.ProductDto">
+        SELECT
+        p.product_id,
+        p.product_name,
+        p.category_id,
+        c.category_name,
+        p.product_note,
+        p.price,
+        p.member_price,
+        p.stock,
+        p.origin_place,
+        p.shipping_place,
+        p.update_time,
+        p.updated_by
+        FROM tb_product p
+        LEFT JOIN tb_category c ON p.category_id = c.category_id
+        <where>
+            p.deleted_flag = false
+
+            <if test="productName != null and productName != ''">
+                AND p.product_name LIKE CONCAT('%', #{productName}, '%')
+            </if>
+
+            <if test="categoryId != 0 and categoryId != null">
+                AND p.category_id = #{categoryId}
+            </if>
+
+            <if test="originPlace != null and originPlace != ''">
+                AND p.origin_place = #{originPlace}
+            </if>
+
+            <if test="shippingPlace != null and shippingPlace != ''">
+                AND p.shipping_place = #{shippingPlace}
+            </if>
+        </where>
+    </select>
+
+    <select id="getAll">
+        SELECT
+            p.product_id,
+            p.product_name,
+            p.category_id,
+            c.category_name,
+            p.product_note,
+            p.price,
+            p.member_price,
+            p.stock,
+            p.origin_place,
+            p.shipping_place,
+            p.update_time,
+            p.updated_by
+        FROM tb_product p
+                 LEFT JOIN tb_category c ON p.category_id = c.category_id
+        <where>
+        p.deleted_flag = false
+        </where>
+
+
+    </select>
+
+    <update id="delete">
+        UPDATE tb_product
+        SET deleted_flag = true
+        WHERE product_id = #{productId}
+    </update>
+
+    <update id="update">
+        UPDATE tb_product
+        SET
+            category_id = #{categoryId},
+            product_name = #{productName},
+            product_note = #{productNote},
+            member_price = #{memberPrice},
+            origin_place = #{originPlace},
+            price = #{price},
+            reserved_field1 = #{reservedField1},
+            reserved_field2 = #{reservedField2},
+            shipping_place = #{shippingPlace},
+            stock = #{stock},
+            update_time = #{updateTime},
+            updated_by = #{updatedBy}
+        WHERE product_id = #{productId}
+    </update>
+
+    <select id="getById">
+        SELECT
+        p.product_id,
+        p.product_name,
+        p.category_id,
+        c.category_name,
+        p.product_note,
+        p.price,
+        p.member_price,
+        p.stock,
+        p.origin_place,
+        p.shipping_place,
+        p.update_time,
+        p.updated_by
+        FROM tb_product p
+        LEFT JOIN tb_category c ON p.category_id = c.category_id
+        <where>
+            p.deleted_flag = false
+            AND p.product_id = #{productId}
+        </where>
+    </select>
+</mapper>

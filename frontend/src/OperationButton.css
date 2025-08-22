@@ -1,0 +1,8 @@
+.table-row-actions {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+tr:hover .table-row-actions {
+  opacity: 1;
+}

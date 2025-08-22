@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.order.mapper.OrderMapper">
+    <insert id="createOrder" parameterType="com.example.order.pojo.po.Order">
+        INSERT INTO tb_order (
+            order_id,
+            order_status,
+            order_time,
+            order_amount,
+            user_id,
+            user_name,
+            product_id,
+            product_name,
+            expire_time,
+            unit_price,
+            total_price
+        ) VALUES (
+                     #{orderId},
+                     #{orderStatus},
+                     #{orderTime},
+                     #{orderAmount},
+                     #{userId},
+                     #{userName},
+                     #{productId},
+                     #{productName},
+                     #{expireTime},
+                     #{unitPrice},
+                     #{totalPrice}
+                 )
+    </insert>
+
+    <update id="cancelOrder">
+        UPDATE tb_order
+        SET order_status = 3
+        WHERE order_id = #{orderId}
+    </update>
+
+    <select id="getUnpaidOrder">
+        SELECT
+            order_id,
+            order_status,
+            order_time,
+            order_amount,
+            user_id,
+            user_name,
+            product_id,
+            product_name,
+                expire_time,
+            unit_price,
+            total_price
+        FROM tb_order
+        WHERE (user_id = #{userId} AND product_id = #{productId} AND order_status = 0 )
+    </select>
+
+    <select id="getOrderById" >
+        SELECT
+            order_id,
+            order_status,
+            order_time,
+            order_amount,
+            user_id,
+            user_name,
+            product_id,
+            product_name,
+            expire_time,
+            unit_price,
+            total_price
+
+        FROM tb_order
+        WHERE order_id = #{orderId}
+    </select>
+</mapper>
